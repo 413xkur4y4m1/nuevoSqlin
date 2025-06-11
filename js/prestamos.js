@@ -227,7 +227,7 @@ async function solicitarPrestamo() {
         const alumno = Object.values(alumnoData)[0];
 
         // Verificar disponibilidad del material
-        const materialRef = firebase.database().ref(`materiales/${id_material}`);
+        const materialRef = firebase.database().ref(`materiales/${sanitizeKey(id_material)}`);
         const materialSnapshot = await materialRef.once('value');
         const material = materialSnapshot.val();
 
@@ -338,4 +338,12 @@ function logout() {
     } else {
         window.location.href = 'sistema-prestamos.html';
     }
+}
+
+// Function to sanitize material names for Firebase paths
+function sanitizeKey(name) {
+    return name
+        .toLowerCase()
+        .replace(/[\.\#\$\[\]]/g, '') // Remove invalid characters
+        .trim();
 }
